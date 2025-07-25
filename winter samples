@@ -1,0 +1,10 @@
+########################################################
+#
+# Emilia-Romagna terrestrial caves
+# winter samples
+#
+########################################################
+
+##### set working directory
+setwd("C:/data")
+
