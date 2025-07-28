@@ -1,0 +1,77 @@
+#######################################################
+#
+# Emilia-Romagna terrestrial caves
+#
+########################################################
+
+#Quindi, passo dopo passo, quello che discuteremo è:
+
+#per ogni marcatore:
+#(1) Analizzare la ricchezza e la beta degli ASV nelle grotte
+#(2) Tracciare i grafici di densità della diversità beta attraverso e all'interno delle grotte
+#(3) Ripetere 1 e 2 solo per la meiofauna
+
+solo per i nematodi
+#(1) calcolare la diversità funzionale e filogenetica per ASV e OTU
+#(2) determinare la ricchezza e la beta per ogni componente nelle grotte
+
+
+##### set working directory
+setwd("C:/data")
+
+##### A. 18 S, no clustering, all metazoans---------------------------------------
+#### Part 0.1 Prepare files ------------------------------------------------------
+
+# Loading ecological data
+
+ecol <- read.csv2("Emilia Romagna samples.csv") # Ecological covariates 
+
+# # rimuove le ultime due righe del dataframe (penultima e ultima)
+ecol <- ecol[-c(nrow(ecol)-1, nrow(ecol)), ] # Eliminate de mine (artificial, no stream, no clear distance from the light) 
+
+# Prepare species dataframe
+species <- read.csv2("Data18S_VenaGesso.csv") # carica il file contenente la lista delle ASV (Amplicon Sequence Variants),
+species <- species[ which (species$Eval.result == "correct"),] # keep only the correct ones
+species <- species[ which (species$rare.asvs == "FALSE"),] # elimina le ASV considerate rare (quelle etichettate come rare.asvs == TRUE
+
+# Prepare community matrix
+
+# upload community matrix (sites x species) in cui le righe sono campioni (siti) e le colonne sono ASV (specie)
+comm <- read.csv2("comm.asv.metazoa.csv") # 
+
+rownames(comm) <- comm$sample_ID
+
+
+
+## Transform community matrix to absence presence
+comm[comm > 1] <- 1
+
+
+
+## Species richness estimation
+ecol <- ecol[match (rownames(comm), ecol$sample_ID),]
+
+ecol$richness <- rowSums(comm)
+
+
+
+##### Filter community matrix after complete ecological matrix
+
+comm <- comm[ which ( row.names(comm) %in% ecol$sample_ID ), ]
+
+
+# 1. Keep only samples that are in both datasets
+common_samples <- intersect(rownames(comm), ecol$sample_ID)
+
+# 2. Subset and sort both to the same order
+comm <- comm[common_samples, ]
+ecol <- ecol[match(common_samples, ecol$sample_ID), ]
+rownames(ecol) <- ecol$sample_ID  # Set rownames of ecol to match comm
+
+
+
+
+#correlation of variables 
+library()
+
+psych::pairs.panels(ecol, cex.cor = 5)
