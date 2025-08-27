@@ -11,7 +11,17 @@
 #(2) Tracciare i grafici di densità della diversità beta attraverso e all'interno delle grotte
 #(3) Ripetere 1 e 2 solo per la meiofauna
 
-solo per i nematodi
+# definizioni utili ---------------------------
+#La β-diversità, generalmente definita come la variazione nelle identità delle specie tra comunità
+# Le Amplicon Sequence Variant rappresentano dei cluster (raggruppamenti) di varianti di sequenze simili tra loro, ognuno di essi
+# aventi lo scopo di rappresentare l’unità tassonomica di una specie batterica o di un gene in relazione
+# a una soglia di similarità tra sequenze. Generalmente questa soglia di similarità viene posta al valore
+# del 97%. Le tabelle ASV quindi contengono il numero di sequenze che vengono osservate per ogni
+# ASV in ogni campione. Le colonne abitualmente rappresentano i campioni mentre le righe
+# rappresentano il genere o la specie specifica per un ASV. 
+# -------------------------------------------
+
+# solo per i nematodi
 #(1) calcolare la diversità funzionale e filogenetica per ASV e OTU
 #(2) determinare la ricchezza e la beta per ogni componente nelle grotte
 
@@ -39,20 +49,20 @@ species <- species[ which (species$rare.asvs == "FALSE"),] # elimina le ASV cons
 # upload community matrix (sites x species) in cui le righe sono campioni (siti) e le colonne sono ASV (specie)
 comm <- read.csv2("comm.asv.metazoa.csv") # 
 
-rownames(comm) <- comm$sample_ID
+rownames(comm) <- comm$sample_ID # Imposta gli ID campione come nomi di riga
 
-
+# Filter community matrix after species list
+# Serve a pulire la matrice di comunità comm, 
+# tenendo solo le ASV che hai deciso essere valide (quelle presenti in species$ASVid).
+comm <- comm[ , which (colnames(comm) %in% species$ASVid) ]
 
 ## Transform community matrix to absence presence
 comm[comm > 1] <- 1
-
-
 
 ## Species richness estimation
 ecol <- ecol[match (rownames(comm), ecol$sample_ID),]
 
 ecol$richness <- rowSums(comm)
-
 
 
 ##### Filter community matrix after complete ecological matrix
@@ -68,10 +78,13 @@ comm <- comm[common_samples, ]
 ecol <- ecol[match(common_samples, ecol$sample_ID), ]
 rownames(ecol) <- ecol$sample_ID  # Set rownames of ecol to match comm
 
+# Part 1.1.A. Richness model ---------------------------------------------------------------------------
 
+install.packages("glmmTMB")
+install.packages("performance")
+install.packages("car")
 
+library(glmmTMB)
+library (performance)
+library(car)
 
-#correlation of variables 
-library()
-
-psych::pairs.panels(ecol, cex.cor = 5)
