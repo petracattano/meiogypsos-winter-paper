@@ -54,7 +54,7 @@ species <- species[ which (species$rare.asvs == "FALSE"),] # elimina le ASV cons
 
 # Prepare community matrix
 
-# upload community matrix (sites x species) in cui le righe sono campioni (siti) e le colonne sono ASV (specie)
+# upload community matrix (sites x species) in cui le righe sono campioni (siti) e le colonne sono ASV (specie) i numeri sono i reads corrispondenti per sito a ciascuna ASV
 comm <- read.csv2("comm.asv.metazoa.csv") # 
 
 rownames(comm) <- comm$sample_ID # Imposta gli ID campione come nomi di riga
@@ -65,7 +65,7 @@ rownames(comm) <- comm$sample_ID # Imposta gli ID campione come nomi di riga
 comm <- comm[ , which (colnames(comm) %in% species$ASVid) ]
 
 ## Transform community matrix to absence presence
-comm[comm > 1] <- 1
+comm[comm > 1] <- 1 #perchè quel valore non so se è perchè ci sono tanti animali o un animale molto grande con tanto DNA
 
 ## Species richness estimation
 ecol <- ecol[match (rownames(comm), ecol$sample_ID),]
