@@ -4,12 +4,20 @@
 #
 ########################################################
 
+#stiamo lavorando su sequenze già clusterizzate --> abbiamo ottenuto matrice con le ASV
+#già filtrate per ottenere solo quelle dei bilateria
+
+
 #Quindi, passo dopo passo, quello che discuteremo è:
 
 #per ogni marcatore:
 #(1) Analizzare la ricchezza e la beta degli ASV nelle grotte
 #(2) Tracciare i grafici di densità della diversità beta attraverso e all'interno delle grotte
 #(3) Ripetere 1 e 2 solo per la meiofauna
+
+#solo per i nematodi
+#(1) calcolare la diversità funzionale e filogenetica per ASV e OTU
+#(2) fare ricchezza e beta per ogni componente attraverso le caverne
 
 # definizioni utili ---------------------------
 #La β-diversità, generalmente definita come la variazione nelle identità delle specie tra comunità
